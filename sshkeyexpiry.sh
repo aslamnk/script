@@ -39,7 +39,7 @@ echo "$FULL_ENTRY" > "$AUTHORIZED_KEYS_FILE"
 echo "The key has been added to the authorized_keys file with an expiry time of $EXPIRY_TIME."
 
 # Prompt for the user's email if not already in the file
-USER_EMAIL_FILE="/path/to/user_expiry_info.txt"
+USER_EMAIL_FILE="/home/user_expiry_info.txt"
 USERNAME=$(whoami)
 USER_INFO=$(grep "^$USERNAME:" "$USER_EMAIL_FILE")
 
