@@ -55,11 +55,13 @@ if [ -n "$USER_INFO" ]; then
     else
         echo "Email found: $USER_EMAIL"
     fi
+else
+    echo "Username not found. Prompting for email."
 fi
 
+# Prompt for email if it was empty or not found
 if [ -z "$USER_EMAIL" ]; then
     read -p "Enter your email address: " USER_EMAIL
-    echo "Email not found or empty, adding to the file."
 fi
 
 # Remove the existing entry for the user to prevent duplicates
@@ -68,3 +70,4 @@ grep -v "^$USERNAME:" "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" && mv "$USER_E
 # Write the username, expiry time, and email to the file, preserving existing data
 echo "$USERNAME:$EXPIRY_TIME:$USER_EMAIL" >> "$USER_EMAIL_FILE"
 echo "Username and expiry time updated in $USER_EMAIL_FILE."
+
