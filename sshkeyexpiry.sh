@@ -46,7 +46,7 @@ echo "$FULL_ENTRY" > "$AUTHORIZED_KEYS_FILE"
 echo "The key has been added to the authorized_keys file with an expiry time of $EXPIRY_TIME."
 
 # Define the user info file path
-USER_EMAIL_FILE="/home/user_expiry_info.txt"  # Replace with the actual path
+USER_EMAIL_FILE="/script/userdata/user_expiry_info.txt"  # Replace with the actual path
 USERNAME=$(whoami)
 
 # Remove any existing entry for the user to prevent duplicates
