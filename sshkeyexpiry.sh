@@ -49,9 +49,9 @@ echo "The key has been added to the authorized_keys file with an expiry time of 
 USER_EMAIL_FILE="/script/userdata/user_expiry_info.txt"  # Replace with the actual path
 USERNAME=$(whoami)
 
-# Remove any existing entry for the user to prevent duplicates
-grep -v "^$USERNAME:" "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" && mv "$USER_EMAIL_FILE.tmp" "$USER_EMAIL_FILE"
-
+# upading existing entry for the user in database
+#grep -v "^$USERNAME:" "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" && mv "$USER_EMAIL_FILE.tmp" "$USER_EMAIL_FILE"
+sed '/"$USERNAME:"/d'  "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" && mv "$USER_EMAIL_FILE.tmp" "$USER_EMAIL_FILE"
 # Write the username, expiry time, and email to the file, preserving existing data
 echo "$USERNAME:$EXPIRY_TIME:$EMAIL" >> "$USER_EMAIL_FILE"
 echo "Username and expiry time updated in $USER_EMAIL_FILE."
