@@ -53,7 +53,7 @@ USERNAME=$(whoami)
 
 # upading existing entry for the user in database
 #grep -v "^$USERNAME:" "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" && mv "$USER_EMAIL_FILE.tmp" "$USER_EMAIL_FILE"
-sed '/"$USERNAME:"/d'  "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" 
+sed "/$USERNAME:/d"  "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" 
 cat "$USER_EMAIL_FILE.tmp" 
 mv "$USER_EMAIL_FILE.tmp" "$USER_EMAIL_FILE"
 
