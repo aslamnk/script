@@ -52,6 +52,7 @@ USERNAME=$(whoami)
 # upading existing entry for the user in database
 #grep -v "^$USERNAME:" "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" && mv "$USER_EMAIL_FILE.tmp" "$USER_EMAIL_FILE"
 sed '/"$USERNAME:"/d'  "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" && mv "$USER_EMAIL_FILE.tmp" "$USER_EMAIL_FILE"
+
 # Write the username, expiry time, and email to the file, preserving existing data
 echo "$USERNAME:$EXPIRY_TIME:$EMAIL" >> "$USER_EMAIL_FILE"
 echo "Username and expiry time updated in $USER_EMAIL_FILE."
