@@ -38,33 +38,14 @@ fi
 echo "$FULL_ENTRY" > "$AUTHORIZED_KEYS_FILE"
 echo "The key has been added to the authorized_keys file with an expiry time of $EXPIRY_TIME."
 
-# Prompt for the user's email if not already in the file
+# Prompt for the user's email directly
+read -p "Enter your email address: " USER_EMAIL
+
+# Define the user info file path
 USER_EMAIL_FILE="/home/user_expiry_info.txt"  # Replace with the actual path
 USERNAME=$(whoami)
 
-# Debugging output
-echo "Checking if username '$USERNAME' exists in the file '$USER_EMAIL_FILE'..."
-
-USER_INFO=$(grep "^$USERNAME:" "$USER_EMAIL_FILE")
-USER_EMAIL=""
-
-if [ -n "$USER_INFO" ]; then
-    USER_EMAIL=$(echo "$USER_INFO" | cut -d':' -f3)
-    if [ -z "$USER_EMAIL" ]; then
-        echo "Email is empty. Prompting for email."
-    else
-        echo "Email found: $USER_EMAIL"
-    fi
-else
-    echo "Username not found. Prompting for email."
-fi
-
-# Prompt for email if it was empty or not found
-if [ -z "$USER_EMAIL" ]; then
-    read -p "Enter your email address: " USER_EMAIL
-fi
-
-# Remove the existing entry for the user to prevent duplicates
+# Remove any existing entry for the user to prevent duplicates
 grep -v "^$USERNAME:" "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" && mv "$USER_EMAIL_FILE.tmp" "$USER_EMAIL_FILE"
 
 # Write the username, expiry time, and email to the file, preserving existing data
