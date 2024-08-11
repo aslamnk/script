@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Check if the EMAIL environment variable is set
+if [ -z "$EMAIL" ]; then
+    echo "Error: EMAIL environment variable is not set."
+    echo "Please set the EMAIL environment variable before running the script."
+    exit 1
+fi
+
 # Define the public and private key paths
 PRIVATE_KEY_PATH="$HOME/.ssh/id_rsa"
 PUB_KEY_PATH="$HOME/.ssh/id_rsa.pub"
@@ -38,9 +45,6 @@ fi
 echo "$FULL_ENTRY" > "$AUTHORIZED_KEYS_FILE"
 echo "The key has been added to the authorized_keys file with an expiry time of $EXPIRY_TIME."
 
-# Prompt for the user's email directly
-read -p "Enter your email address: " USER_EMAIL
-
 # Define the user info file path
 USER_EMAIL_FILE="/home/user_expiry_info.txt"  # Replace with the actual path
 USERNAME=$(whoami)
@@ -49,6 +53,5 @@ USERNAME=$(whoami)
 grep -v "^$USERNAME:" "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" && mv "$USER_EMAIL_FILE.tmp" "$USER_EMAIL_FILE"
 
 # Write the username, expiry time, and email to the file, preserving existing data
-echo "$USERNAME:$EXPIRY_TIME:$USER_EMAIL" >> "$USER_EMAIL_FILE"
+echo "$USERNAME:$EXPIRY_TIME:$EMAIL" >> "$USER_EMAIL_FILE"
 echo "Username and expiry time updated in $USER_EMAIL_FILE."
-
