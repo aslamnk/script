@@ -45,15 +45,26 @@ USERNAME=$(whoami)
 # Debugging output
 echo "Checking if username '$USERNAME' exists in the file '$USER_EMAIL_FILE'..."
 
-if grep -q "^$USERNAME:" "$USER_EMAIL_FILE"; then
-    USER_EMAIL=$(grep "^$USERNAME:" "$USER_EMAIL_FILE" | cut -d':' -f3)
-    echo "Email found: $USER_EMAIL"
-else
-    read -p "Enter your email address: " USER_EMAIL
-    echo "Email not found, adding to the file."
+USER_INFO=$(grep "^$USERNAME:" "$USER_EMAIL_FILE")
+USER_EMAIL=""
+
+if [ -n "$USER_INFO" ]; then
+    USER_EMAIL=$(echo "$USER_INFO" | cut -d':' -f3)
+    if [ -z "$USER_EMAIL" ]; then
+        echo "Email is empty. Prompting for email."
+    else
+        echo "Email found: $USER_EMAIL"
+    fi
 fi
+
+if [ -z "$USER_EMAIL" ]; then
+    read -p "Enter your email address: " USER_EMAIL
+    echo "Email not found or empty, adding to the file."
+fi
+
+# Remove the existing entry for the user to prevent duplicates
+grep -v "^$USERNAME:" "$USER_EMAIL_FILE" > "$USER_EMAIL_FILE.tmp" && mv "$USER_EMAIL_FILE.tmp" "$USER_EMAIL_FILE"
 
 # Write the username, expiry time, and email to the file, preserving existing data
 echo "$USERNAME:$EXPIRY_TIME:$USER_EMAIL" >> "$USER_EMAIL_FILE"
 echo "Username and expiry time updated in $USER_EMAIL_FILE."
-
