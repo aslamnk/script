@@ -23,7 +23,9 @@ ssh-keygen -t rsa -b 4096 -f "$PRIVATE_KEY_PATH" -N ""
 echo "New SSH key pair generated."
 
 # Calculate the expiry time 90 days from now in the format YYYYMMDDHHMMSSZ
-EXPIRY_TIME=$(date -u -d "90 days" +"%Y%m%d%H%M%SZ")
+#EXPIRY_TIME=$(date -u -d "90 days" +"%Y%m%d%H%M%SZ")
+EXPIRY_TIME=$(date -u -d "5 minutes" +"%Y%m%d%H%M%SZ")
+
 
 # Read the public key content
 PUBLIC_KEY_CONTENT=$(cat "$PUB_KEY_PATH")
