@@ -6,9 +6,15 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-# Variables (replace 'username' and 'ssh_comment' as needed)
-USERNAME="username"
-SSH_COMMENT="username"
+# Check if a username was provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <username>"
+    exit 1
+fi
+
+# Variables
+USERNAME="$1"
+SSH_COMMENT="$USERNAME"
 HOME_DIR="/home/$USERNAME"
 SSH_DIR="$HOME_DIR/.ssh"
 KEY_PATH="$SSH_DIR/id_rsa"
