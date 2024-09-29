@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Database connection parameters
-HOST="compliance-careezy-dev-stagging.cufnrrhslbyc.eu-west-1.rds.amazonaws.com"
+HOST=""
 USER="postgres"
 # Uncomment and set the password if required
 # PGPASSWORD="your_password"
@@ -26,7 +26,7 @@ for DB in $DB_LIST; do
     echo "Dumping database: $DB"
     
     # Take dump
-    pg_dump -h $HOST -U $USER -F c -d $DB -f "${DB}_dump.sql"
+    pg_dump -h $HOST -U $USER -d $DB > "${DB}_dump.sql"
     
     if [ $? -eq 0 ]; then
         echo "Successfully dumped $DB to ${DB}_dump.sql"
