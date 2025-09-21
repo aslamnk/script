@@ -2,7 +2,7 @@
 
 # Usage:
 #   Local: ./upload_to_ssm.sh path/to/.env paramter-prefix
-#   Remote: curl -s https://github.com/aslamnk/script/upload_to_ssm.sh | bash -s path/to/.env wam-saudi-api-be-prod
+#   Remote: curl -s https://raw.githubusercontent.com/aslamnk/script/main/upload_to_ssm.sh | bash -s path/to/.env paramter-prefix
 
 set -euo pipefail
 
