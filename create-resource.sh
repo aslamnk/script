@@ -120,6 +120,28 @@ install_postgresql() {
     print_status "Database: app_db, User: app_user, Password: app_password"
 }
 
+# Function to install redis
+install_redis() {
+    print_status "Installing Redis..."
+    
+    if command -v redis-server &> /dev/null; then
+        print_warning "Redis is already installed"
+        return
+    fi
+    
+    apt-get install -y redis-server >/dev/null 2>&1
+    systemctl start redis-server
+    systemctl enable redis-server
+    
+    # Configure Redis for production use
+    sed -i 's/^# maxmemory <bytes>/maxmemory 256mb/' /etc/redis/redis.conf
+    sed -i 's/^# maxmemory-policy noeviction/maxmemory-policy allkeys-lru/' /etc/redis/redis.conf
+    systemctl restart redis-server
+    
+    print_success "Redis installed and configured"
+    print_status "Redis running on localhost:6379"
+}
+
 # Function to configure nginx
 configure_nginx() {
     print_status "Configuring Nginx for domain: $DOMAIN -> Port: $APP_PORT"
@@ -172,15 +194,17 @@ show_final_status() {
     systemctl is-active --quiet docker && print_success "  Docker: Running" || print_error "  Docker: Not running"
     systemctl is-active --quiet nginx && print_success "  Nginx: Running" || print_error "  Nginx: Not running"
     systemctl is-active --quiet postgresql && print_success "  PostgreSQL: Running" || print_error "  PostgreSQL: Not running"
+    systemctl is-active --quiet redis-server && print_success "  Redis: Running" || print_error "  Redis: Not running"
     echo ""
     print_status "Test your setup:"
     echo "  curl http://$DOMAIN"
     echo ""
     print_status "Database Info:"
-    echo "  Database: app_db"
-    echo "  Username: app_user"
-    echo "  Password: app_password"
-    echo "  Connection: postgresql://app_user:app_password@localhost:5432/app_db"
+    echo "  PostgreSQL Database: app_db"
+    echo "  PostgreSQL Username: app_user"
+    echo "  PostgreSQL Password: app_password"
+    echo "  PostgreSQL Connection: postgresql://app_user:app_password@localhost:5432/app_db"
+    echo "  Redis Connection: redis://localhost:6379"
     echo ""
     print_status "Next steps:"
     echo "  1. Point your domain DNS to this server's IP"
@@ -203,6 +227,7 @@ main() {
     install_nginx
     install_certbot
     install_postgresql
+    install_redis
     configure_nginx
     
     # Show final status
